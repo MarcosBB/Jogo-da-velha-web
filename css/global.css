@@ -25,3 +25,7 @@ body {
     background: linear-gradient(180deg, var(--c10) 0%, var(--c11) 78.65%);
     font-family: Poppins, Roboto, sans-serif;
 }
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
