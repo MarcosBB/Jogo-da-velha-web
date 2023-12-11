@@ -54,6 +54,10 @@ main {
     background: var(--p1);
 }
 
+.game-hud-play:active {
+    background: var(--p3);
+}
+
 .game-table {
     display: grid;
     grid-template-columns: repeat(3, 100px);

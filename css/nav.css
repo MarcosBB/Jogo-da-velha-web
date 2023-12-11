@@ -1,0 +1,113 @@
+nav {
+    background-color: var(--c11);
+    height: 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 40px;
+}
+
+h1, h2 {
+    font-family: Poppins;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 600;
+}
+
+nav h1 {
+    color: var(--c4);
+}
+
+.nav-button {
+    background-color: var(--c10);
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+}
+
+.nav-button:hover {
+    background-color: var(--c9);
+}
+
+.nav-button:active {
+    background-color: var(--c8);
+}
+
+.menu {
+    position: absolute;
+    background-color: var(--c11);
+    height: 100%;
+    right: 0px;
+    top: 0px;
+    z-index: 1;
+}
+
+.menu-title {
+    color: var(--c7);
+    padding: 24px;
+    width: 436px;
+}
+
+.menu-title button {
+    position: absolute;
+}
+
+.menu-title h2 {
+    text-align: center;
+}
+
+.menu-options {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 12px;
+}
+
+.menu-options p, .menu-creator p{
+    color: var(--c5, #B2B2B2);
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+.menu-creator span {
+    font-weight: 600;
+    color: var(--c2);
+}
+
+.menu-options-option, .menu-creator {
+    display: flex;
+    align-items: center;
+    padding: 0px 24px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.menu-creator-links {
+    display: flex;
+    gap: 12px;
+}
+
+.menu-options-link:visited {
+    color: var(--p4);
+}
+
+.menu-options-link {
+    color: var(--p2);
+}
+
+.menu-options-link:hover {
+    color: var(--p1);
+}
+
+.menu-options-link:active {
+    color: var(--p3);
+}
