@@ -97,7 +97,6 @@ export default class Game {
     }
 
     move(box_index, player) {
-        console.log(this)
         if (this.board.boxes[box_index] === "" && this.winner === null) {
             this.board.boxes[box_index] = player.symbol
 
@@ -106,9 +105,6 @@ export default class Game {
             img.src = `./img/icons/${player.symbol}.svg`
             this.board.html_boxes[box_index].appendChild(img)
 
-            console.log(this.checkWinner(this.currentPlayer.symbol))
-            console.log(this.board.getLines())
-            
             if (this.checkWinner(this.currentPlayer.symbol)) {
                 this.winner = this.currentPlayer
                 this.currentPlayer.score += 1
@@ -117,9 +113,6 @@ export default class Game {
             else {
                 this.changePlayer()
             }
-            
-
-            
         }
     }
 
