@@ -5,6 +5,7 @@ export class Player {
     }
 }
 
+
 class Board {
     constructor(side) {
         this.boxes = this.createBoxes(side)
@@ -39,6 +40,7 @@ class Board {
 
     getLines() {
         let lines = []
+
         // horizontal
         for (let i = 0; i < this.side; i++) {
             lines.push(this.boxes.slice(i * this.side, (i + 1) * this.side))
@@ -66,11 +68,10 @@ class Board {
         }
         lines.push(line)
 
-
         return lines
     }
-
 }
+
 
 export default class Game {
     constructor(side, player1, player2) {
@@ -128,7 +129,6 @@ export default class Game {
         return false;
     }
     
-
     updateScore() {
         let player1_score = document.querySelector('.player1-score')
         let player2_score = document.querySelector('.player2-score')
