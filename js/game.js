@@ -9,6 +9,7 @@ class Board {
     constructor(side) {
         this.boxes = this.createBoxes(side)
         this.html_boxes = document.querySelectorAll('.game-table-division')
+        this.side = side
     }
 
     createBoxes(side) {
@@ -36,23 +37,36 @@ class Board {
         return boxes
     }
 
-    getLines(array, side) {
+    getLines() {
         let lines = []
-        let line = []
-    
-        for (let i = 0; i < array.length; i++) {
-            line.push(array[i])
-    
-            if (line.length === side) {
-                lines.push(line)
-                line = [];
-            }
+        // horizontal
+        for (let i = 0; i < this.side; i++) {
+            lines.push(this.boxes.slice(i * this.side, (i + 1) * this.side))
         }
-    
-        if (line.length > 0) {
+
+        // vertical
+        for (let i = 0; i < this.side; i++) {
+            let line = []
+            for (let j = 0; j < this.side; j++) {
+                line.push(this.boxes[i + j * this.side])
+            }
             lines.push(line)
         }
-    
+
+        // diagonal
+        let line = []
+        for (let i = 0; i < this.side; i++) {
+            line.push(this.boxes[i + i * this.side])
+        }
+        lines.push(line)
+
+        line = []
+        for (let i = 0; i < this.side; i++) {
+            line.push(this.boxes[i + (this.side - i - 1) * this.side])
+        }
+        lines.push(line)
+
+
         return lines
     }
 
@@ -64,6 +78,7 @@ export default class Game {
         this.player2 = player2
         this.board = new Board(side)
         this.currentPlayer = this.player1
+        this.winner = null
 
         this.board.html_boxes.forEach((box) => {
             box.addEventListener('click', () => {
@@ -79,11 +94,11 @@ export default class Game {
         } else {
             this.currentPlayer = this.player1
         }
-        console.log(this.currentPlayer)
     }
 
     move(box_index, player) {
-        if (this.board.boxes[box_index] === "") {
+        console.log(this)
+        if (this.board.boxes[box_index] === "" && this.winner === null) {
             this.board.boxes[box_index] = player.symbol
 
             let img = document.createElement("img")
@@ -91,32 +106,35 @@ export default class Game {
             img.src = `./img/icons/${player.symbol}.svg`
             this.board.html_boxes[box_index].appendChild(img)
 
-            let winner = this.checkWinner(this.currentPlayer.symbol)
-            console.log(winner)
-
-            if (winner) {
+            console.log(this.checkWinner(this.currentPlayer.symbol))
+            console.log(this.board.getLines())
+            
+            if (this.checkWinner(this.currentPlayer.symbol)) {
+                this.winner = this.currentPlayer
                 this.currentPlayer.score += 1
                 this.updateScore()
             }
             else {
                 this.changePlayer()
             }
-            console.log(this.board.boxes)
+            
+
+            
         }
     }
 
     checkWinner(symbol) {
-        let winner = false
-        let lines = this.board.getLines(this.board.boxes, 3)
-
-        lines.forEach((line) => {
-            if (line.every((box) => box === symbol)) {
-                winner = true
+        let lines = this.board.getLines();
+    
+        for (let i = 0; i < lines.length; i++) {
+            if (lines[i].every((box) => box === symbol)) {
+                return true;
             }
-        })
-
-        return winner
+        }
+    
+        return false;
     }
+    
 
     updateScore() {
         let player1_score = document.querySelector('.player1-score')
