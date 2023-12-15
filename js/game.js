@@ -43,14 +43,12 @@ class Board {
         for (let i = 0; i < array.length; i++) {
             line.push(array[i])
     
-            // Check if the line is complete based on the "side" value
             if (line.length === side) {
                 lines.push(line)
-                line = [];  // Start a new line
+                line = [];
             }
         }
     
-        // Push the last line if it's not complete
         if (line.length > 0) {
             lines.push(line)
         }
