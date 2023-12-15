@@ -17,8 +17,8 @@ class Board {
         let parentElement = document.querySelector('.game-table')
         this.html_boxes = document.querySelectorAll('.game-table-division')
 
-        if (html_boxes != null) {
-            html_boxes.forEach(function(elemento) {
+        if (this.html_boxes != null) {
+            this.html_boxes.forEach(function(elemento) {
                 if (elemento.parentNode) {
                     elemento.parentNode.removeChild(elemento);
                 }
