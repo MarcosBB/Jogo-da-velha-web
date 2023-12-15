@@ -85,28 +85,44 @@ export default class Game {
     move(box_index, player) {
         if (this.board.boxes[box_index] === "") {
             this.board.boxes[box_index] = player.symbol
+
             let img = document.createElement("img")
             img.classList.add("game-table-division-img")
             img.src = `./img/icons/${player.symbol}.svg`
             this.board.html_boxes[box_index].appendChild(img)
-            this.changePlayer()
+
+            let winner = this.checkWinner(this.currentPlayer.symbol)
+            console.log(winner)
+
+            if (winner) {
+                this.currentPlayer.score += 1
+                this.updateScore()
+            }
+            else {
+                this.changePlayer()
+            }
             console.log(this.board.boxes)
         }
     }
 
-    checkWinner() {
+    checkWinner(symbol) {
         let winner = false
         let lines = this.board.getLines(this.board.boxes, 3)
-        let symbols = ["X", "O"]
 
-        symbols.forEach((symbol) => {
-            lines.forEach((line) => {
-                if (line.every((box) => box === symbol)) {
-                    winner = true
-                }
-            })
+        lines.forEach((line) => {
+            if (line.every((box) => box === symbol)) {
+                winner = true
+            }
         })
 
         return winner
+    }
+
+    updateScore() {
+        let player1_score = document.querySelector('.player1-score')
+        let player2_score = document.querySelector('.player2-score')
+
+        player1_score.innerHTML = this.player1.score
+        player2_score.innerHTML = this.player2.score
     }
 }
