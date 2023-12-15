@@ -1,13 +1,13 @@
 main {
-    height: 90vh;
+    height: 100vh;
     width: 100vw;
 }
 
 .game {
     border-radius: 5px;
     background-color: var(--c12);
-    height: 840px;
-    width: 800px;
+    height: calc(82vh + 40px - 80px);
+    width: calc(82vh - 80px);
     margin: auto;
     margin-top: 80px;
     position: relative;
@@ -60,7 +60,7 @@ main {
 
 .game-table {
     display: grid;
-    grid-template-columns: repeat(3, 100px);
+    grid-template-columns: repeat(3, 70px);
     place-content: center; 
     align-items: center;
     width: 100%;
@@ -69,7 +69,11 @@ main {
 }
 
 .game-table-division {
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
     border: 6px solid var(--c10, #2E2E2E);
+}
+
+.game-table-division:hover {
+    background-color: var(--c9);
 }
