@@ -1,4 +1,4 @@
-class Player {
+export class Player {
     constructor(symbol) {
         this.symbol = symbol
         this.score = 0
@@ -58,12 +58,19 @@ class Board {
 
 }
 
-class Game {
-    constructor(side) {
-        this.player1 = new Player('X')
-        this.player2 = new Player('O')
+export default class Game {
+    constructor(side, player1, player2) {
+        this.player1 = player1
+        this.player2 = player2
         this.board = new Board(side)
         this.currentPlayer = this.player1
+
+        this.board.html_boxes.forEach((box) => {
+            box.addEventListener('click', () => {
+                let box_index = Array.from(this.board.html_boxes).indexOf(box)
+                this.move(box_index, this.currentPlayer)
+            })
+        })
     }
 
     changePlayer() {
@@ -74,6 +81,32 @@ class Game {
         }
         console.log(this.currentPlayer)
     }
-}
 
-export default Game
+    move(box_index, player) {
+        if (this.board.boxes[box_index] === "") {
+            this.board.boxes[box_index] = player.symbol
+            let img = document.createElement("img")
+            img.classList.add("game-table-division-img")
+            img.src = `./img/icons/${player.symbol}.svg`
+            this.board.html_boxes[box_index].appendChild(img)
+            this.changePlayer()
+            console.log(this.board.boxes)
+        }
+    }
+
+    checkWinner() {
+        let winner = false
+        let lines = this.board.getLines(this.board.boxes, 3)
+        let symbols = ["X", "O"]
+
+        symbols.forEach((symbol) => {
+            lines.forEach((line) => {
+                if (line.every((box) => box === symbol)) {
+                    winner = true
+                }
+            })
+        })
+
+        return winner
+    }
+}
