@@ -9,13 +9,13 @@ const mobileNavbar = new MobileNavbar(
 )
 mobileNavbar.init()
 
-let player1 = new Player('X')
-let player2 = new Player('O')
-
 let play_button = document.querySelector('.game-hud-play')
+let botSwitch = document.querySelector(".bot-switch")
 
 play_button.addEventListener('click', () => {
     let side = document.querySelector('.menu-options-option-slider').value
-    let game = new Game(side, player1, player2)
+    let player1 = new Player('X')
+    let player2 = new Player("O")
+    let game = new Game(side, player1, player2, botSwitch.checked)
 })
 

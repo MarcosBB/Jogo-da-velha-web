@@ -67,19 +67,19 @@ class Board {
             line.push(this.boxes[i + (this.side - i - 1) * this.side])
         }
         lines.push(line)
-
         return lines
     }
 }
 
 
 export default class Game {
-    constructor(side, player1, player2) {
+    constructor(side, player1, player2, bot) {
         this.player1 = player1
         this.player2 = player2
         this.board = new Board(side)
         this.currentPlayer = this.player1
         this.winner = null
+        this.bot=bot
 
         this.board.html_boxes.forEach((box) => {
             box.addEventListener('click', () => {
@@ -100,13 +100,11 @@ export default class Game {
     move(box_index, player) {
         if (this.board.boxes[box_index] === "" && this.winner === null) {
             this.board.boxes[box_index] = player.symbol
+            this.addSymble(box_index, player)
 
-            let img = document.createElement("img")
-            img.classList.add("game-table-division-img")
-            img.src = `./img/icons/${player.symbol}.svg`
-            this.board.html_boxes[box_index].appendChild(img)
-
+            console.log(this.checkWinner(this.currentPlayer.symbol))
             if (this.checkWinner(this.currentPlayer.symbol)) {
+                console.log("ENTREI NO IF checkWinner")
                 this.winner = this.currentPlayer
                 this.currentPlayer.score += 1
                 this.updateScore()
@@ -114,7 +112,24 @@ export default class Game {
             else {
                 this.changePlayer()
             }
+
+            if (this.isBot) {
+                let botMove = Math.floor(Math.random() * this.board.boxes.length)
+                while (this.board.boxes[botMove] !== "") {
+                    botMove = Math.floor(Math.random() * this.board.boxes.length)
+                }
+                this.move(botMove, this.currentPlayer)
+            }
         }
+
+
+    }
+
+    addSymble(box_index, player) {
+        let img = document.createElement("img")
+        img.classList.add("game-table-division-img")
+        img.src = `./img/icons/${player.symbol}.svg`
+        this.board.html_boxes[box_index].appendChild(img)
     }
 
     checkWinner(symbol) {
@@ -130,6 +145,7 @@ export default class Game {
     }
     
     updateScore() {
+        console.log("ENTREI NO updateScore")
         let player1_score = document.querySelector('.player1-score')
         let player2_score = document.querySelector('.player2-score')
 
