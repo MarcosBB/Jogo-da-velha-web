@@ -122,6 +122,9 @@ export default class Game {
     
         for (let i = 0; i < lines.length; i++) {
             if (lines[i].every((box) => box === symbol)) {
+                let buttonImg = document.querySelector('.game-hud-play img')
+                buttonImg.src = './img/icons/play.svg'
+                buttonImg.alt = 'Play'
                 return true;
             }
         }
