@@ -17,5 +17,9 @@ let play_button = document.querySelector('.game-hud-play')
 play_button.addEventListener('click', () => {
     let side = document.querySelector('.menu-options-option-slider').value
     let game = new Game(side, player1, player2)
+
+    let buttonImg = document.querySelector('.game-hud-play img')
+    buttonImg.src = './img/icons/refresh.svg'
+    buttonImg.alt = 'Refresh'
 })
 
