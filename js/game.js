@@ -92,8 +92,21 @@ export default class Game {
     changePlayer() {
         if (this.currentPlayer === this.player1) {
             this.currentPlayer = this.player2
+
+            //
+            let oldFlag = document.querySelector("#flag-1")
+            let currFlag = document.querySelector("#flag-2")
+            oldFlag.style.opacity = 0
+            currFlag.style.opacity = 1
+
         } else {
             this.currentPlayer = this.player1
+            
+            //
+            let oldFlag = document.querySelector("#flag-2")
+            let currFlag = document.querySelector("#flag-1")
+            oldFlag.style.opacity = 0
+            currFlag.style.opacity = 1
         }
     }
 

@@ -21,7 +21,14 @@ play_button.addEventListener('click', () => {
     let buttonImg = document.querySelector('.game-hud-play img')
     buttonImg.src = './img/icons/refresh.svg'
     buttonImg.alt = 'Refresh'
+
+    let oldFlag = document.querySelector("#flag-2")
+    let currFlag = document.querySelector("#flag-1")
+    oldFlag.style.opacity = 0
+    currFlag.style.opacity = 1
 })
+
+
 
 var clickTimeout
 
