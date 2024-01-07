@@ -9,15 +9,15 @@ export class Player {
 class Board {
     constructor(side) {
         this.boxes = this.createBoxes(side)
-        this.html_boxes = document.querySelectorAll('.game-table-division')
+        this.html_boxes = document.querySelectorAll('.game-table-square-division')
         this.side = side
     }
 
     createBoxes(side) {
         let boxes = []
         let total = side * side
-        let parentElement = document.querySelector('.game-table')
-        this.html_boxes = document.querySelectorAll('.game-table-division')
+        let parentElement = document.querySelector('.game-table-square')
+        this.html_boxes = document.querySelectorAll('.game-table-square-division')
 
         if (this.html_boxes != null) {
             this.html_boxes.forEach(function(elemento) {
@@ -32,7 +32,7 @@ class Board {
         for (let i = 0; i < total; i++) {
             boxes[i] = ""
             let division = document.createElement("div")
-            division.classList.add("game-table-division")
+            division.classList.add("game-table-square-division")
             parentElement.appendChild(division)
         }
         return boxes
@@ -102,7 +102,7 @@ export default class Game {
             this.board.boxes[box_index] = player.symbol
 
             let img = document.createElement("img")
-            img.classList.add("game-table-division-img")
+            img.classList.add("game-table-square-division-img")
             img.src = `./img/icons/${player.symbol}.svg`
             this.board.html_boxes[box_index].appendChild(img)
 

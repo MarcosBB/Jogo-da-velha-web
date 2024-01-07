@@ -59,27 +59,33 @@ main {
 }
 
 .game-table {
+    width: 100%;
+    height: 100%;
+    padding: 0px auto;
+    padding-top: 40px;
+}
+
+.game-table-square-division {
+    width: 55px;
+    height: 55px;
+    background-color: blue;
+}
+
+.game-table-square-division:hover {
+    background-color: var(--c9);
+}
+
+.game-table-square-division-img {
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    margin: 4px;
+}
+
+.game-table-square{
     display: grid;
     grid-template-columns: repeat(3, 55px);
     place-content: center; 
     align-items: center;
-    width: 100%;
-    height: 100%;
-    padding-top: 40px;
-}
-
-.game-table-division {
-    width: 55px;
-    height: 55px;
-    border: 6px solid var(--c10, #2E2E2E);
-}
-
-.game-table-division:hover {
-    background-color: var(--c9);
-}
-
-.game-table-division-img {
-    width: calc(100% - 8px);
-    height: calc(100% - 8px);
-    margin: 4px;
+    border: 3px solid var(--c10);
+    /* opacity: 0; */
 }
