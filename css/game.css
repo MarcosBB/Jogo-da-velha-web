@@ -26,9 +26,10 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #FFBB00;
+    background-color: var(--p1);
     opacity: 0;
     font-family: Poppins;
+    color:var(--p5);
     font-size: 32px;
     font-weight: 600;
     line-height: 40px;
