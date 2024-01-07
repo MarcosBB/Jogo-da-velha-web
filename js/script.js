@@ -22,17 +22,3 @@ play_button.addEventListener('click', () => {
     buttonImg.src = './img/icons/refresh.svg'
     buttonImg.alt = 'Refresh'
 })
-
-var clickTimeout
-
-let slider = document.querySelector('.menu-options-option-slider')
-slider.addEventListener("mousedown", function () {
-    clickTimeout = setInterval(function() {
-        let slideNumber = document.querySelector('#slide-value')
-        slideNumber.innerHTML = document.querySelector('.menu-options-option-slider').value
-      }, 0);
-});
-
-slider.addEventListener("mouseup", function () {
-    clearInterval(clickTimeout);
-});
