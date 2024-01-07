@@ -138,6 +138,9 @@ export default class Game {
                 let buttonImg = document.querySelector('.game-hud-play img')
                 buttonImg.src = './img/icons/play.svg'
                 buttonImg.alt = 'Play'
+
+                let flagMenu = document.querySelector(".game-hud-flag")
+                flagMenu.style.top = "2px"
                 return true;
             }
         }
