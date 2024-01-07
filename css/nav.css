@@ -101,6 +101,11 @@ nav h1 {
     align-items: center;
 }
 
+#slide-value {
+    width: 21px;
+    text-align: right;
+}
+
 .menu-body {
     display: flex;
     flex-direction: column;
