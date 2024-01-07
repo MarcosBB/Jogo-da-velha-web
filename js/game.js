@@ -92,8 +92,21 @@ export default class Game {
     changePlayer() {
         if (this.currentPlayer === this.player1) {
             this.currentPlayer = this.player2
+
+            //
+            let oldFlag = document.querySelector("#flag-1")
+            let currFlag = document.querySelector("#flag-2")
+            oldFlag.style.opacity = 0
+            currFlag.style.opacity = 1
+
         } else {
             this.currentPlayer = this.player1
+            
+            //
+            let oldFlag = document.querySelector("#flag-2")
+            let currFlag = document.querySelector("#flag-1")
+            oldFlag.style.opacity = 0
+            currFlag.style.opacity = 1
         }
     }
 
@@ -125,6 +138,9 @@ export default class Game {
                 let buttonImg = document.querySelector('.game-hud-play img')
                 buttonImg.src = './img/icons/play.svg'
                 buttonImg.alt = 'Play'
+
+                let flagMenu = document.querySelector(".game-hud-flag")
+                flagMenu.style.top = "2px"
                 return true;
             }
         }
