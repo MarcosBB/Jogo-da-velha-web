@@ -70,6 +70,13 @@ class Board {
         lines.push(line)
         return lines
     }
+
+    addSymbol(boxIndex, player) {
+        let img = document.createElement("img")
+        img.classList.add("game-table-division-img")
+        img.src = `./img/icons/${player.symbol}.svg`
+        this.htmlBoxes[boxIndex].appendChild(img)
+    }
 }
 
 
@@ -130,7 +137,7 @@ export default class Game {
     move(boxIndex, player) {
         if (this.board.boxes[boxIndex] === "" && this.winner === null) {
             this.board.boxes[boxIndex] = player.symbol
-            this.addSymbol(boxIndex, player)
+            this.board.addSymbol(boxIndex, player)
 
             if (this.checkWinner(this.currentPlayer.symbol)) {
                 this.winner = this.currentPlayer
@@ -144,13 +151,6 @@ export default class Game {
                 this.move(this.bot.move(this.board), this.currentPlayer)
             }
         }
-    }
-
-    addSymbol(boxIndex, player) {
-        let img = document.createElement("img")
-        img.classList.add("game-table-division-img")
-        img.src = `./img/icons/${player.symbol}.svg`
-        this.board.htmlBoxes[boxIndex].appendChild(img)
     }
 
     checkWinner(symbol) {
@@ -170,7 +170,7 @@ export default class Game {
     
         return false;
     }
-    
+
     updateScore() {
         let player1Score = document.querySelector('.player1-score')
         let player2Score = document.querySelector('.player2-score')
