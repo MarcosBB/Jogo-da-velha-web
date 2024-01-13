@@ -21,11 +21,9 @@ let player2
 let game
 
 document.addEventListener('DOMContentLoaded', () => {
-    // side = sideSelector.value
-    side = 3
+    side = sideSelector.value
     player1 = new Player('X', false)
-    // player2 = new Player('O', botSwitch.checked)
-    player2 = new Player('O', true)
+    player2 = new Player('O', botSwitch.checked)
     game = new Game(side, player1, player2)
 });
 
