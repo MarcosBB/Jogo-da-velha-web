@@ -74,13 +74,21 @@ class Board {
 
 
 export default class Game {
-    constructor(side, player1, player2) {
+    constructor(side, player1, player2, currentPlayer) {
         this.player1 = player1
         this.player2 = player2
         this.board = new Board(side)
-        this.currentPlayer = this.player1
         this.winner = null
         this.bot = new Bot("easy")
+
+        if (currentPlayer) {
+            this.currentPlayer = currentPlayer
+        }
+        else {
+            this.currentPlayer = this.randomPlayer(player1, player2)
+        }
+
+        this.setCurrentPlayerFlag(this.currentPlayer)
 
         this.board.htmlBoxes.forEach((box) => {
             box.addEventListener('click', () => {
@@ -90,6 +98,13 @@ export default class Game {
                 }
             })
         })
+
+        let buttonImg = document.querySelector('.game-hud-play img')
+        buttonImg.src = './img/icons/refresh.svg'
+        buttonImg.alt = 'Refresh'
+
+        let flagMenu = document.querySelector(".game-hud-flag")
+        flagMenu.style.top = "-40px"
     }
 
     randomPlayer(player1, player2) {
@@ -106,21 +121,10 @@ export default class Game {
         if (this.currentPlayer === this.player1) {
             this.currentPlayer = this.player2
 
-            //
-            let oldFlag = document.querySelector("#flag-1")
-            let currFlag = document.querySelector("#flag-2")
-            oldFlag.style.opacity = 0
-            currFlag.style.opacity = 1
-
         } else {
             this.currentPlayer = this.player1
-            
-            //
-            let oldFlag = document.querySelector("#flag-2")
-            let currFlag = document.querySelector("#flag-1")
-            oldFlag.style.opacity = 0
-            currFlag.style.opacity = 1
         }
+        this.setCurrentPlayerFlag(this.currentPlayer)
     }
 
     move(boxIndex, player) {
@@ -173,6 +177,20 @@ export default class Game {
 
         player1Score.innerHTML = this.player1.score
         player2Score.innerHTML = this.player2.score
+    }
+
+    setCurrentPlayerFlag(player) {
+        let player1Flag = document.querySelector("#flag-1")
+        let player2Flag = document.querySelector("#flag-2")
+        
+        if (player === this.player1) {
+            player1Flag.style.opacity = 1
+            player2Flag.style.opacity = 0
+
+        } else {
+            player1Flag.style.opacity = 0
+            player2Flag.style.opacity = 1
+        }
     }
 }
 
