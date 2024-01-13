@@ -9,37 +9,34 @@ const mobileNavbar = new MobileNavbar(
 )
 mobileNavbar.init()
 
-let play_button = document.querySelector('.game-hud-play')
-let restart_button = document.querySelector('#restart-button')
+let playButton = document.querySelector('.game-hud-play')
+let restartButton = document.querySelector('#restart-button')
 let botSwitch = document.querySelector(".bot-switch")
-let side_selector = document.querySelector('.menu-options-option-slider')
+let sideSelector = document.querySelector('.menu-options-option-slider')
 
 
-let side 
+let side
 let player1
 let player2
 let game
 
 document.addEventListener('DOMContentLoaded', () => {
-    side = side_selector.value
+    // side = sideSelector.value
+    side = 3
     player1 = new Player('X', false)
-    player2 = new Player('O', botSwitch.checked)
+    // player2 = new Player('O', botSwitch.checked)
+    player2 = new Player('O', true)
     game = new Game(side, player1, player2)
-    console.log(game)
 });
 
-play_button.addEventListener('click', () => {
+playButton.addEventListener('click', () => {
     game = new Game(side, player1, player2)
-
-    console.log(game)
 })
 
-restart_button.addEventListener('click', () => {
-    side = side_selector.value
+restartButton.addEventListener('click', () => {
+    side = sideSelector.value
     player1 = new Player('X', false)
     player2 = new Player('O', botSwitch.checked)
     game = new Game(side, player1, player2)
     game.updateScore()
-
-    console.log(game)
 })
