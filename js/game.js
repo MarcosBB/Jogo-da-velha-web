@@ -1,7 +1,8 @@
 export class Player {
-    constructor(symbol) {
+    constructor(symbol, isBot) {
         this.symbol = symbol
         this.score = 0
+        this.isBot = isBot
     }
 }
 
@@ -9,7 +10,7 @@ export class Player {
 class Board {
     constructor(side) {
         this.boxes = this.createBoxes(side)
-        this.html_boxes = document.querySelectorAll('.game-table-division')
+        this.htmlBoxes = document.querySelectorAll('.game-table-division')
         this.side = side
     }
 
@@ -17,10 +18,10 @@ class Board {
         let boxes = []
         let total = side * side
         let parentElement = document.querySelector('.game-table')
-        this.html_boxes = document.querySelectorAll('.game-table-division')
+        this.htmlBoxes = document.querySelectorAll('.game-table-division')
 
-        if (this.html_boxes != null) {
-            this.html_boxes.forEach(function(elemento) {
+        if (this.htmlBoxes != null) {
+            this.htmlBoxes.forEach(function(elemento) {
                 if (elemento.parentNode) {
                     elemento.parentNode.removeChild(elemento);
                 }
@@ -67,57 +68,76 @@ class Board {
             line.push(this.boxes[i + (this.side - i - 1) * this.side])
         }
         lines.push(line)
-
         return lines
+    }
+
+    addSymbol(boxIndex, player) {
+        let img = document.createElement("img")
+        img.classList.add("game-table-division-img")
+        img.src = `./img/icons/${player.symbol}.svg`
+        this.htmlBoxes[boxIndex].appendChild(img)
     }
 }
 
 
 export default class Game {
-    constructor(side, player1, player2) {
+    constructor(side, player1, player2, currentPlayer) {
         this.player1 = player1
         this.player2 = player2
         this.board = new Board(side)
-        this.currentPlayer = this.player1
         this.winner = null
+        this.bot = new Bot("easy")
 
-        this.board.html_boxes.forEach((box) => {
+        if (currentPlayer) {
+            this.currentPlayer = currentPlayer
+        }
+        else {
+            this.currentPlayer = this.randomPlayer(player1, player2)
+        }
+
+        this.setCurrentPlayerFlag(this.currentPlayer)
+
+        this.board.htmlBoxes.forEach((box) => {
             box.addEventListener('click', () => {
-                let box_index = Array.from(this.board.html_boxes).indexOf(box)
-                this.move(box_index, this.currentPlayer)
+                if (!this.currentPlayer.isBot) {
+                    let boxIndex = Array.from(this.board.htmlBoxes).indexOf(box)
+                    this.move(boxIndex, this.currentPlayer)
+                }
             })
         })
+
+        let buttonImg = document.querySelector('.game-hud-play img')
+        buttonImg.src = './img/icons/refresh.svg'
+        buttonImg.alt = 'Refresh'
+
+        let flagMenu = document.querySelector(".game-hud-flag")
+        flagMenu.style.top = "-40px"
+    }
+
+    randomPlayer(player1, player2) {
+        let random = Math.floor(Math.random() * 2)
+        if (random === 0) {
+            return player1
+        }
+        else {
+            return player2
+        }
     }
 
     changePlayer() {
         if (this.currentPlayer === this.player1) {
             this.currentPlayer = this.player2
 
-            //
-            let oldFlag = document.querySelector("#flag-1")
-            let currFlag = document.querySelector("#flag-2")
-            oldFlag.style.opacity = 0
-            currFlag.style.opacity = 1
-
         } else {
             this.currentPlayer = this.player1
-            
-            //
-            let oldFlag = document.querySelector("#flag-2")
-            let currFlag = document.querySelector("#flag-1")
-            oldFlag.style.opacity = 0
-            currFlag.style.opacity = 1
         }
+        this.setCurrentPlayerFlag(this.currentPlayer)
     }
 
-    move(box_index, player) {
-        if (this.board.boxes[box_index] === "" && this.winner === null) {
-            this.board.boxes[box_index] = player.symbol
-
-            let img = document.createElement("img")
-            img.classList.add("game-table-division-img")
-            img.src = `./img/icons/${player.symbol}.svg`
-            this.board.html_boxes[box_index].appendChild(img)
+    move(boxIndex, player) {
+        if (this.board.boxes[boxIndex] === "" && this.winner === null) {
+            this.board.boxes[boxIndex] = player.symbol
+            this.board.addSymbol(boxIndex, player)
 
             if (this.checkWinner(this.currentPlayer.symbol)) {
                 this.winner = this.currentPlayer
@@ -126,6 +146,9 @@ export default class Game {
             }
             else {
                 this.changePlayer()
+            }
+            if (this.currentPlayer.isBot) {
+                this.move(this.bot.move(this.board), this.currentPlayer)
             }
         }
     }
@@ -147,12 +170,47 @@ export default class Game {
     
         return false;
     }
-    
-    updateScore() {
-        let player1_score = document.querySelector('.player1-score')
-        let player2_score = document.querySelector('.player2-score')
 
-        player1_score.innerHTML = this.player1.score
-        player2_score.innerHTML = this.player2.score
+    updateScore() {
+        let player1Score = document.querySelector('.player1-score')
+        let player2Score = document.querySelector('.player2-score')
+
+        player1Score.innerHTML = this.player1.score
+        player2Score.innerHTML = this.player2.score
+    }
+
+    setCurrentPlayerFlag(player) {
+        let player1Flag = document.querySelector("#flag-1")
+        let player2Flag = document.querySelector("#flag-2")
+        
+        if (player === this.player1) {
+            player1Flag.style.opacity = 1
+            player2Flag.style.opacity = 0
+
+        } else {
+            player1Flag.style.opacity = 0
+            player2Flag.style.opacity = 1
+        }
+    }
+}
+
+
+class Bot {
+    constructor(difficulty) {
+        this.difficulty = difficulty
+    }
+
+    move(board) {
+        if (this.difficulty === "easy") {
+            return this.easyMove(board)
+        }
+    }
+
+    easyMove(board) {
+        let botMove = Math.floor(Math.random() * board.boxes.length)
+        while (board.boxes[botMove] !== "") {
+            botMove = Math.floor(Math.random() * board.boxes.length)
+        }
+        return botMove
     }
 }

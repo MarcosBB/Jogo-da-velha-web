@@ -91,17 +91,8 @@ main {
 
 .game-hud-play {
     border-radius: 57px;
-    background: var(--p2);
     width: 80px;
     height: 80px;
-}
-
-.game-hud-play:hover {
-    background: var(--p1);
-}
-
-.game-hud-play:active {
-    background: var(--p3);
 }
 
 .game-table {
