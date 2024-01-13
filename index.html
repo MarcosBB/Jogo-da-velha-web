@@ -14,7 +14,9 @@
 <body>
     <main>
         <nav>
-            <h1>Jogo da velha</h1>
+            <div class="nav-title">
+                <h1>Jogo da velha</h1>
+            </div>
             <button class="nav-button nav-button-open">
                 <img src="./img/icons/menu.svg" alt="Abrir menu">
             </button>
@@ -33,8 +35,8 @@
                         </div>
                         <div class="menu-options-option">
                             <p>Lado da grade</p>
-                            <input class="menu-options-option-slider" type="range" min="3" max="10">
-                            <p>10</p>
+                            <input class="menu-options-option-slider" type="range" min="3" max="10" value="3">
+                            <p id="slide-value">3</p>
                         </div>
                         <button id="restart-button">
                             <img src="./img/icons/refresh.svg" alt="Reiniciar">
@@ -64,6 +66,17 @@
         </nav>
 
         <div class="game">
+            <div class="game-hud-flag">
+                <div class="scoreboard-flag" id="flag-1">
+                    Vitória!
+                </div>
+                <div class="game-hud-flag-play">
+                </div>
+                <div class="scoreboard-flag" id="flag-2">
+                    Vitória!
+                </div>
+            </div>
+
             <div class="game-hud">
                 <div class="game-hud-scoreboard">
                     <p class="player1-score">0</p>
