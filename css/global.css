@@ -32,4 +32,29 @@ body {
 
 button {
     cursor: pointer;
+    background-color: var(--p2);
+}
+
+button:hover {
+    background-color: var(--p1);
+}
+
+button:active {
+    background-color: var(--p3);
+}
+
+a {
+    color: var(--p2);
+}
+
+a:visited {
+    color: var(--p4);
+}
+
+a:hover {
+    color: var(--p1);
+}
+
+a:active {
+    color: var(--p3);
 }

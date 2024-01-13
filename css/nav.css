@@ -56,6 +56,8 @@ nav h1 {
 .menu-title {
     color: var(--c7);
     width: 436px;
+    display: flex;
+    align-items: center;
 }
 
 .menu-title button {
@@ -63,7 +65,7 @@ nav h1 {
 }
 
 .menu-title h2 {
-    text-align: center;
+    margin: 0px auto;
 }
 
 .menu-options {
@@ -71,11 +73,11 @@ nav h1 {
     flex-direction: column;
     height: 100%;
     gap: 12px;
-    margin-top: 45px;
+    margin-top: 40px;
 }
 
 .menu-options p, .menu-creator p{
-    color: var(--c5, #B2B2B2);
+    color: var(--c5);
     font-family: Roboto;
     font-size: 18px;
     font-weight: 500;
@@ -106,18 +108,22 @@ nav h1 {
     gap: 12px;
 }
 
-.menu-options-link:visited {
-    color: var(--p4);
+#restart-button {
+    display: flex;
+    padding: 16px 32px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 40px;
+    margin-top: 12px;
 }
 
-.menu-options-link {
-    color: var(--p2);
-}
-
-.menu-options-link:hover {
-    color: var(--p1);
-}
-
-.menu-options-link:active {
-    color: var(--p3);
+#restart-button p {
+    color: var(--p5);
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    text-transform: uppercase;
 }
