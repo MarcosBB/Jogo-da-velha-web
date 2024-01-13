@@ -10,7 +10,7 @@ export class Player {
 class Board {
     constructor(side) {
         this.boxes = this.createBoxes(side)
-        this.html_boxes = document.querySelectorAll('.game-table-division')
+        this.htmlBoxes = document.querySelectorAll('.game-table-division')
         this.side = side
     }
 
@@ -18,10 +18,10 @@ class Board {
         let boxes = []
         let total = side * side
         let parentElement = document.querySelector('.game-table')
-        this.html_boxes = document.querySelectorAll('.game-table-division')
+        this.htmlBoxes = document.querySelectorAll('.game-table-division')
 
-        if (this.html_boxes != null) {
-            this.html_boxes.forEach(function(elemento) {
+        if (this.htmlBoxes != null) {
+            this.htmlBoxes.forEach(function(elemento) {
                 if (elemento.parentNode) {
                     elemento.parentNode.removeChild(elemento);
                 }
@@ -82,11 +82,11 @@ export default class Game {
         this.winner = null
         this.bot = new Bot("easy")
 
-        this.board.html_boxes.forEach((box) => {
+        this.board.htmlBoxes.forEach((box) => {
             box.addEventListener('click', () => {
                 if (!this.currentPlayer.isBot) {
-                    let box_index = Array.from(this.board.html_boxes).indexOf(box)
-                    this.move(box_index, this.currentPlayer)
+                    let boxIndex = Array.from(this.board.htmlBoxes).indexOf(box)
+                    this.move(boxIndex, this.currentPlayer)
                 }
             })
         })
@@ -110,10 +110,10 @@ export default class Game {
         }
     }
 
-    move(box_index, player) {
-        if (this.board.boxes[box_index] === "" && this.winner === null) {
-            this.board.boxes[box_index] = player.symbol
-            this.addSymble(box_index, player)
+    move(boxIndex, player) {
+        if (this.board.boxes[boxIndex] === "" && this.winner === null) {
+            this.board.boxes[boxIndex] = player.symbol
+            this.addSymbol(boxIndex, player)
 
             if (this.checkWinner(this.currentPlayer.symbol)) {
                 this.winner = this.currentPlayer
@@ -129,11 +129,11 @@ export default class Game {
         }
     }
 
-    addSymble(box_index, player) {
+    addSymbol(boxIndex, player) {
         let img = document.createElement("img")
         img.classList.add("game-table-division-img")
         img.src = `./img/icons/${player.symbol}.svg`
-        this.board.html_boxes[box_index].appendChild(img)
+        this.board.htmlBoxes[boxIndex].appendChild(img)
     }
 
     checkWinner(symbol) {
@@ -149,11 +149,11 @@ export default class Game {
     }
     
     updateScore() {
-        let player1_score = document.querySelector('.player1-score')
-        let player2_score = document.querySelector('.player2-score')
+        let player1Score = document.querySelector('.player1-score')
+        let player2Score = document.querySelector('.player2-score')
 
-        player1_score.innerHTML = this.player1.score
-        player2_score.innerHTML = this.player2.score
+        player1Score.innerHTML = this.player1.score
+        player2Score.innerHTML = this.player2.score
     }
 }
 
