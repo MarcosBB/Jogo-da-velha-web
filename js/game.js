@@ -112,6 +112,10 @@ export default class Game {
 
         let flagMenu = document.querySelector(".game-hud-flag")
         flagMenu.style.top = "-40px"
+
+        if (this.currentPlayer.isBot) {
+            this.move(this.bot.move(this.board), this.currentPlayer)
+        }
     }
 
     randomPlayer(player1, player2) {
@@ -147,8 +151,10 @@ export default class Game {
             else {
                 this.changePlayer()
             }
-            if (this.currentPlayer.isBot) {
-                this.move(this.bot.move(this.board), this.currentPlayer)
+            if (this.currentPlayer.isBot && !this.checkDraw()) {
+                setTimeout(() => {
+                    this.move(this.bot.move(this.board), this.currentPlayer);
+                }, 900);
             }
         }
     }
@@ -169,6 +175,13 @@ export default class Game {
         }
     
         return false;
+    }
+
+    checkDraw() {
+        if (this.board.boxes.every((box) => box !== "")) {
+            return true
+        }
+        return false
     }
 
     updateScore() {
