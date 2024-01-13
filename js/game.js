@@ -1,7 +1,8 @@
 export class Player {
-    constructor(symbol) {
+    constructor(symbol, isBot) {
         this.symbol = symbol
         this.score = 0
+        this.is_bot = isBot
     }
 }
 
@@ -89,6 +90,17 @@ export default class Game {
         })
     }
 
+    randomPlayer(player1, player2) {
+        let random = Math.floor(Math.random() * 2)
+        if (random === 0) {
+            return player1
+        }
+        else {
+            return player2
+        }
+    }
+
+
     changePlayer() {
         if (this.currentPlayer === this.player1) {
             this.currentPlayer = this.player2
@@ -113,7 +125,7 @@ export default class Game {
                 this.changePlayer()
             }
 
-            if (this.isBot) {
+            if (this.currentPlayer.isBot) {
                 let botMove = Math.floor(Math.random() * this.board.boxes.length)
                 while (this.board.boxes[botMove] !== "") {
                     botMove = Math.floor(Math.random() * this.board.boxes.length)
