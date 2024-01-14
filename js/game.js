@@ -39,38 +39,6 @@ class Board {
         return boxes
     }
 
-    getLines() {
-        let lines = []
-
-        // horizontal
-        for (let i = 0; i < this.side; i++) {
-            lines.push(this.boxes.slice(i * this.side, (i + 1) * this.side))
-        }
-
-        // vertical
-        for (let i = 0; i < this.side; i++) {
-            let line = []
-            for (let j = 0; j < this.side; j++) {
-                line.push(this.boxes[i + j * this.side])
-            }
-            lines.push(line)
-        }
-
-        // diagonal
-        let line = []
-        for (let i = 0; i < this.side; i++) {
-            line.push(this.boxes[i + i * this.side])
-        }
-        lines.push(line)
-
-        line = []
-        for (let i = 0; i < this.side; i++) {
-            line.push(this.boxes[i + (this.side - i - 1) * this.side])
-        }
-        lines.push(line)
-        return lines
-    }
-
     addSymbol(boxIndex, player) {
         let img = document.createElement("img")
         img.classList.add("game-table-division-img")
@@ -87,6 +55,7 @@ export default class Game {
         this.board = new Board(side)
         this.winner = null
         this.bot = new Bot("easy")
+        this.checkWinnerLimit = 0
 
         if (currentPlayer) {
             this.currentPlayer = currentPlayer
@@ -112,6 +81,10 @@ export default class Game {
 
         let flagMenu = document.querySelector(".game-hud-flag")
         flagMenu.style.top = "-40px"
+
+        if (this.currentPlayer.isBot) {
+            this.move(this.bot.move(this.board), this.currentPlayer)
+        }
     }
 
     randomPlayer(player1, player2) {
@@ -134,6 +107,43 @@ export default class Game {
         this.setCurrentPlayerFlag(this.currentPlayer)
     }
 
+    getLines() {
+        let lines = []
+
+        // horizontal
+        for (let i = 0; i < this.board.side; i++) {
+            let line = {}
+            for (let j = 0; j < this.board.side; j++) {
+                line[j + 3*i] = this.board.boxes[j+3*i]
+            }
+            lines.push(line)
+        }
+
+        // vertical
+        for (let i = 0; i < this.board.side; i++) {
+            let line = {}
+            for (let j = 0; j < this.board.side; j++) {
+                line[j*this.board.side + i] = this.board.boxes[i+j * this.board.side]
+            }
+            lines.push(line)
+        }
+
+        // diagonal
+        let line = {}
+        for (let i = 0; i < this.board.side; i++) {
+            line[4*i] = this.board.boxes[4*i]
+        }
+        lines.push(line)
+
+        line = {}
+        for (let i = 0; i < this.board.side; i++) {
+            line[2+2*i] = this.board.boxes[2+2*i]
+        }
+        lines.push(line)
+        console.log(lines)
+        return lines
+    }
+
     move(boxIndex, player) {
         if (this.board.boxes[boxIndex] === "" && this.winner === null) {
             this.board.boxes[boxIndex] = player.symbol
@@ -147,17 +157,20 @@ export default class Game {
             else {
                 this.changePlayer()
             }
-            if (this.currentPlayer.isBot) {
-                this.move(this.bot.move(this.board), this.currentPlayer)
+            if (this.currentPlayer.isBot && !this.checkDraw()) {
+                setTimeout(() => {
+                    this.move(this.bot.move(this.board), this.currentPlayer);
+                }, 900);
             }
         }
     }
 
     checkWinner(symbol) {
-        let lines = this.board.getLines();
+        let lines = this.getLines();
     
+        
         for (let i = 0; i < lines.length; i++) {
-            if (lines[i].every((box) => box === symbol)) {
+            if (Object.values(lines[i]).every((value) => value === symbol)) {
                 let buttonImg = document.querySelector('.game-hud-play img')
                 buttonImg.src = './img/icons/play.svg'
                 buttonImg.alt = 'Play'
@@ -166,9 +179,42 @@ export default class Game {
                 flagMenu.style.top = "2px"
                 return true;
             }
+            if(!this.checkWinnerLimit && symbol == "X"){
+                this.checkPlayerWinCondition(symbol,lines, i)
+            }
+            
         }
-    
+        this.checkWinnerLimit = 0
         return false;
+    }
+
+    checkPlayerWinCondition(symbol, lines, i){
+        let count = 0
+        let keyList = Object.keys(lines[i])
+        for(let j = 0;j < this.board.side; j++){
+            if(lines[i][keyList[j]] == symbol){
+                count++
+            }
+            if(count == this.board.side - 1){
+                //console.log('a', count)
+                let nextMove
+                for (var key in lines[i]) {
+                    if (lines[i][key] === '') {
+                      nextMove = key;
+                      this.checkWinnerLimit = 1
+                      break; 
+                    }
+                  }
+                this.bot.check = [i, nextMove]
+            }
+        }
+    }
+
+    checkDraw() {
+        if (this.board.boxes.every((box) => box !== "")) {
+            return true
+        }
+        return false
     }
 
     updateScore() {
@@ -198,9 +244,24 @@ export default class Game {
 class Bot {
     constructor(difficulty) {
         this.difficulty = difficulty
+        this.check = 0
+        this.played = []
     }
 
     move(board) {
+        if(this.check){
+            console.log(this.played)
+            console.log(this.check[0], this.check[1])
+            let temp = this.check[1]
+            
+            if(!this.played.includes(this.check[0])&&this.check[1]){
+                this.played.push(this.check[0])
+                this.check = 0
+                return temp
+            }
+
+            this.check = 0
+        }
         if (this.difficulty === "easy") {
             return this.easyMove(board)
         }
