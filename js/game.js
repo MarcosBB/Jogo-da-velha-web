@@ -210,22 +210,26 @@ export default class Game {
                     if (lines[i][key] === '') {
                         nextMove = key;
                         this.checkWinnerLimit = 1
+                        console.log("MAMA")
+                        this.bot.check = [i, nextMove]
                       break; 
                     }
                   }
-                this.bot.check = [i, nextMove]
+                
             }
             if(count2 == this.board.side - 1 && (!this.checkWinnerLimit || !this.winConditionPriority)){
                 let nextMove
                 for (var key in lines[i]) {
                     if (lines[i][key] === '') {
-                      nextMove = key;
-                      this.checkWinnerLimit = 1
-                      this.winConditionPriority = 1
-                      break; 
+                        console.log("MAMA2")
+                        nextMove = key;
+                        this.checkWinnerLimit = 1
+                        this.winConditionPriority = 1
+                        this.bot.check = [i, nextMove]
+                        break; 
                     }
                   }
-                this.bot.check = [i, nextMove]
+                
             }
         }
     }
@@ -269,6 +273,7 @@ class Bot {
     }
 
     move(board) {
+        console.log(this.check)
         if (this.difficulty === "easy") {
             return this.easyMove(board)
         }
