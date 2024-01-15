@@ -54,8 +54,9 @@ export default class Game {
         this.player2 = player2
         this.board = new Board(side)
         this.winner = null
-        this.bot = new Bot("easy")
+        this.bot = new Bot("hard")
         this.checkWinnerLimit = 0
+        this.winConditionPriority = 0
 
         if (currentPlayer) {
             this.currentPlayer = currentPlayer
@@ -179,29 +180,48 @@ export default class Game {
                 flagMenu.style.top = "2px"
                 return true;
             }
-            if(!this.checkWinnerLimit && symbol == "X"){
-                this.checkPlayerWinCondition(symbol,lines, i)
+            if(symbol == "X"){
+                this.checkWinCondition(symbol,lines, i)
             }
             
         }
+        this.winConditionPriority = 0
         this.checkWinnerLimit = 0
         return false;
     }
 
-    checkPlayerWinCondition(symbol, lines, i){
+    checkWinCondition(symbol, lines, i){
         let count = 0
+        let count2 = 0
         let keyList = Object.keys(lines[i])
+        
         for(let j = 0;j < this.board.side; j++){
             if(lines[i][keyList[j]] == symbol){
                 count++
             }
-            if(count == this.board.side - 1){
-                //console.log('a', count)
+
+            if(lines[i][keyList[j]] != symbol && lines[i][keyList[j]] != ''){
+                count2++
+            }
+
+            if(count == this.board.side - 1 && !this.checkWinnerLimit && !this.winConditionPriority){
+                let nextMove
+                for (var key in lines[i]) {
+                    if (lines[i][key] === '') {
+                        nextMove = key;
+                        this.checkWinnerLimit = 1
+                      break; 
+                    }
+                  }
+                this.bot.check = [i, nextMove]
+            }
+            if(count2 == this.board.side - 1 && (!this.checkWinnerLimit || !this.winConditionPriority)){
                 let nextMove
                 for (var key in lines[i]) {
                     if (lines[i][key] === '') {
                       nextMove = key;
                       this.checkWinnerLimit = 1
+                      this.winConditionPriority = 1
                       break; 
                     }
                   }
@@ -249,21 +269,14 @@ class Bot {
     }
 
     move(board) {
-        if(this.check){
-            console.log(this.played)
-            console.log(this.check[0], this.check[1])
-            let temp = this.check[1]
-            
-            if(!this.played.includes(this.check[0])&&this.check[1]){
-                this.played.push(this.check[0])
-                this.check = 0
-                return temp
-            }
-
-            this.check = 0
-        }
         if (this.difficulty === "easy") {
             return this.easyMove(board)
+        }
+        else if(this.difficulty === "medium"){
+            return this.mediumMove(board)
+        }
+        else if(this.difficulty === "hard"){
+            return this.hardMove(board)
         }
     }
 
@@ -273,5 +286,24 @@ class Bot {
             botMove = Math.floor(Math.random() * board.boxes.length)
         }
         return botMove
+    }
+
+    mediumMove(board){
+        if(this.check){
+            let temp = this.check[1]
+            
+            if(!this.played.includes(this.check[0]) && this.check[1]){
+                this.played.push(this.check[0])
+                this.check = 0
+                return temp
+            }
+
+            this.check = 0
+        }
+        return this.easyMove(board)
+    }
+
+    hardMove(board){
+        return this.mediumMove(board)
     }
 }
