@@ -39,6 +39,43 @@ class Board {
         return boxes
     }
 
+    getLines() {
+        let lines = []
+
+        // horizontal
+        for (let i = 0; i < this.side; i++) {
+            let line = {}
+            for (let j = 0; j < this.side; j++) {
+                line[j + 3*i] = this.boxes[j+3*i]
+            }
+            lines.push(line)
+        }
+
+        // vertical
+        for (let i = 0; i < this.side; i++) {
+            let line = {}
+            for (let j = 0; j < this.side; j++) {
+                line[j*this.side + i] = this.boxes[i+j * this.side]
+            }
+            lines.push(line)
+        }
+
+        // diagonal
+        let line = {}
+        for (let i = 0; i < this.side; i++) {
+            line[4*i] = this.boxes[4*i]
+        }
+        lines.push(line)
+
+        line = {}
+        for (let i = 0; i < this.side; i++) {
+            line[2+2*i] = this.boxes[2+2*i]
+        }
+        lines.push(line)
+        console.log(lines)
+        return lines
+    }
+
     addSymbol(boxIndex, player) {
         let img = document.createElement("img")
         img.classList.add("game-table-division-img")
@@ -55,8 +92,6 @@ export default class Game {
         this.board = new Board(side)
         this.winner = null
         this.bot = new Bot("hard")
-        this.checkWinnerLimit = 0
-        this.winConditionPriority = 0
 
         if (currentPlayer) {
             this.currentPlayer = currentPlayer
@@ -108,43 +143,6 @@ export default class Game {
         this.setCurrentPlayerFlag(this.currentPlayer)
     }
 
-    getLines() {
-        let lines = []
-
-        // horizontal
-        for (let i = 0; i < this.board.side; i++) {
-            let line = {}
-            for (let j = 0; j < this.board.side; j++) {
-                line[j + 3*i] = this.board.boxes[j+3*i]
-            }
-            lines.push(line)
-        }
-
-        // vertical
-        for (let i = 0; i < this.board.side; i++) {
-            let line = {}
-            for (let j = 0; j < this.board.side; j++) {
-                line[j*this.board.side + i] = this.board.boxes[i+j * this.board.side]
-            }
-            lines.push(line)
-        }
-
-        // diagonal
-        let line = {}
-        for (let i = 0; i < this.board.side; i++) {
-            line[4*i] = this.board.boxes[4*i]
-        }
-        lines.push(line)
-
-        line = {}
-        for (let i = 0; i < this.board.side; i++) {
-            line[2+2*i] = this.board.boxes[2+2*i]
-        }
-        lines.push(line)
-        console.log(lines)
-        return lines
-    }
-
     move(boxIndex, player) {
         if (this.board.boxes[boxIndex] === "" && this.winner === null) {
             this.board.boxes[boxIndex] = player.symbol
@@ -163,11 +161,12 @@ export default class Game {
                     this.move(this.bot.move(this.board), this.currentPlayer);
                 }, 900);
             }
+            
         }
     }
 
     checkWinner(symbol) {
-        let lines = this.getLines();
+        let lines = this.board.getLines();
     
         
         for (let i = 0; i < lines.length; i++) {
@@ -180,59 +179,11 @@ export default class Game {
                 flagMenu.style.top = "2px"
                 return true;
             }
-            if(symbol == "X"){
-                this.checkWinCondition(symbol,lines, i)
-            }
-            
         }
-        this.winConditionPriority = 0
-        this.checkWinnerLimit = 0
         return false;
     }
 
-    checkWinCondition(symbol, lines, i){
-        let count = 0
-        let count2 = 0
-        let keyList = Object.keys(lines[i])
-        
-        for(let j = 0;j < this.board.side; j++){
-            if(lines[i][keyList[j]] == symbol){
-                count++
-            }
-
-            if(lines[i][keyList[j]] != symbol && lines[i][keyList[j]] != ''){
-                count2++
-            }
-
-            if(count == this.board.side - 1 && !this.checkWinnerLimit && !this.winConditionPriority){
-                let nextMove
-                for (var key in lines[i]) {
-                    if (lines[i][key] === '') {
-                        nextMove = key;
-                        this.checkWinnerLimit = 1
-                        console.log("MAMA")
-                        this.bot.check = [i, nextMove]
-                      break; 
-                    }
-                  }
-                
-            }
-            if(count2 == this.board.side - 1 && (!this.checkWinnerLimit || !this.winConditionPriority)){
-                let nextMove
-                for (var key in lines[i]) {
-                    if (lines[i][key] === '') {
-                        console.log("MAMA2")
-                        nextMove = key;
-                        this.checkWinnerLimit = 1
-                        this.winConditionPriority = 1
-                        this.bot.check = [i, nextMove]
-                        break; 
-                    }
-                  }
-                
-            }
-        }
-    }
+    
 
     checkDraw() {
         if (this.board.boxes.every((box) => box !== "")) {
@@ -268,12 +219,11 @@ export default class Game {
 class Bot {
     constructor(difficulty) {
         this.difficulty = difficulty
-        this.check = 0
-        this.played = []
+        this.nextMove = 0
     }
 
     move(board) {
-        console.log(this.check)
+        console.log(this.nextMove)
         if (this.difficulty === "easy") {
             return this.easyMove(board)
         }
@@ -294,21 +244,80 @@ class Bot {
     }
 
     mediumMove(board){
-        if(this.check){
-            let temp = this.check[1]
-            
-            if(!this.played.includes(this.check[0]) && this.check[1]){
-                this.played.push(this.check[0])
-                this.check = 0
-                return temp
-            }
-
-            this.check = 0
+        let random = Math.floor(Math.random() * 2)
+        if (random === 0) {
+            return this.easyMove(board)
         }
-        return this.easyMove(board)
+        else {
+            return this.hardMove(board)
+        }
     }
 
     hardMove(board){
-        return this.mediumMove(board)
+
+        function getVoidIndex(line){
+            for (var nextMove in line) {
+                if (line[nextMove] === '') {
+                    return nextMove
+                }
+            }
+            return null
+        }
+
+        let isFirstUse = false
+        let winConditionPriority = false
+        let nextMove
+
+        for(let line of board.getLines()){
+            
+            let playerWinConditionCount = 0
+            let botWinConditionCount = 0
+            let keyList = Object.keys(line)
+            
+            for(let j = 0;j < board.side; j++){
+                if(line[keyList[j]] == 'X'){
+                    playerWinConditionCount++
+                }
+
+                if(line[keyList[j]] == 'O'){
+                    botWinConditionCount++
+                }
+
+                if(playerWinConditionCount == board.side - 1 && !isFirstUse && !winConditionPriority){
+                    let voidIndex = getVoidIndex(line)
+                    if(voidIndex){
+                        isFirstUse = true
+                        nextMove = voidIndex
+                    }
+                }
+
+                if(botWinConditionCount == board.side - 1 && (!isFirstUse || !winConditionPriority)){
+                    let voidIndex = getVoidIndex(line)
+                    if(voidIndex){
+                        isFirstUse = true
+                        winConditionPriority = true
+                        return voidIndex
+                    }
+                }
+            }
+
+            isFirstUse = false
+            winConditionPriority = false
+
+        }
+
+        if(nextMove){
+            let temp = nextMove
+            
+            if(nextMove){
+                nextMove = null
+                return temp
+            }
+
+            nextMove = null
+        }
+        return this.easyMove(board)
+
     }
+
 }
