@@ -72,7 +72,6 @@ class Board {
             line[2+2*i] = this.boxes[2+2*i]
         }
         lines.push(line)
-        console.log(lines)
         return lines
     }
 
@@ -223,7 +222,6 @@ class Bot {
     }
 
     move(board) {
-        console.log(this.nextMove)
         if (this.difficulty === "easy") {
             return this.easyMove(board)
         }
