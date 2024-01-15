@@ -44,28 +44,32 @@ class Board {
 
         // horizontal
         for (let i = 0; i < this.side; i++) {
-            lines.push(this.boxes.slice(i * this.side, (i + 1) * this.side))
+            let line = {}
+            for (let j = 0; j < this.side; j++) {
+                line[j + 3*i] = this.boxes[j+3*i]
+            }
+            lines.push(line)
         }
 
         // vertical
         for (let i = 0; i < this.side; i++) {
-            let line = []
+            let line = {}
             for (let j = 0; j < this.side; j++) {
-                line.push(this.boxes[i + j * this.side])
+                line[j*this.side + i] = this.boxes[i+j * this.side]
             }
             lines.push(line)
         }
 
         // diagonal
-        let line = []
+        let line = {}
         for (let i = 0; i < this.side; i++) {
-            line.push(this.boxes[i + i * this.side])
+            line[4*i] = this.boxes[4*i]
         }
         lines.push(line)
 
-        line = []
+        line = {}
         for (let i = 0; i < this.side; i++) {
-            line.push(this.boxes[i + (this.side - i - 1) * this.side])
+            line[2+2*i] = this.boxes[2+2*i]
         }
         lines.push(line)
         return lines
@@ -86,7 +90,7 @@ export default class Game {
         this.player2 = player2
         this.board = new Board(side)
         this.winner = null
-        this.bot = new Bot("easy")
+        this.bot = new Bot("hard")
 
         if (currentPlayer) {
             this.currentPlayer = currentPlayer
@@ -156,14 +160,16 @@ export default class Game {
                     this.move(this.bot.move(this.board), this.currentPlayer);
                 }, 900);
             }
+            
         }
     }
 
     checkWinner(symbol) {
         let lines = this.board.getLines();
     
+        
         for (let i = 0; i < lines.length; i++) {
-            if (lines[i].every((box) => box === symbol)) {
+            if (Object.values(lines[i]).every((value) => value === symbol)) {
                 let buttonImg = document.querySelector('.game-hud-play img')
                 buttonImg.src = './img/icons/play.svg'
                 buttonImg.alt = 'Play'
@@ -173,9 +179,10 @@ export default class Game {
                 return true;
             }
         }
-    
         return false;
     }
+
+    
 
     checkDraw() {
         if (this.board.boxes.every((box) => box !== "")) {
@@ -211,11 +218,18 @@ export default class Game {
 class Bot {
     constructor(difficulty) {
         this.difficulty = difficulty
+        this.nextMove = 0
     }
 
     move(board) {
         if (this.difficulty === "easy") {
             return this.easyMove(board)
+        }
+        else if(this.difficulty === "medium"){
+            return this.mediumMove(board)
+        }
+        else if(this.difficulty === "hard"){
+            return this.hardMove(board)
         }
     }
 
@@ -226,4 +240,82 @@ class Bot {
         }
         return botMove
     }
+
+    mediumMove(board){
+        let random = Math.floor(Math.random() * 2)
+        if (random === 0) {
+            return this.easyMove(board)
+        }
+        else {
+            return this.hardMove(board)
+        }
+    }
+
+    hardMove(board){
+
+        function getVoidIndex(line){
+            for (var nextMove in line) {
+                if (line[nextMove] === '') {
+                    return nextMove
+                }
+            }
+            return null
+        }
+
+        let isFirstUse = false
+        let winConditionPriority = false
+        let nextMove
+
+        for(let line of board.getLines()){
+            
+            let playerWinConditionCount = 0
+            let botWinConditionCount = 0
+            let keyList = Object.keys(line)
+            
+            for(let j = 0;j < board.side; j++){
+                if(line[keyList[j]] == 'X'){
+                    playerWinConditionCount++
+                }
+
+                if(line[keyList[j]] == 'O'){
+                    botWinConditionCount++
+                }
+
+                if(playerWinConditionCount == board.side - 1 && !isFirstUse && !winConditionPriority){
+                    let voidIndex = getVoidIndex(line)
+                    if(voidIndex){
+                        isFirstUse = true
+                        nextMove = voidIndex
+                    }
+                }
+
+                if(botWinConditionCount == board.side - 1 && (!isFirstUse || !winConditionPriority)){
+                    let voidIndex = getVoidIndex(line)
+                    if(voidIndex){
+                        isFirstUse = true
+                        winConditionPriority = true
+                        return voidIndex
+                    }
+                }
+            }
+
+            isFirstUse = false
+            winConditionPriority = false
+
+        }
+
+        if(nextMove){
+            let temp = nextMove
+            
+            if(nextMove){
+                nextMove = null
+                return temp
+            }
+
+            nextMove = null
+        }
+        return this.easyMove(board)
+
+    }
+
 }
