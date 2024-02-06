@@ -41,37 +41,40 @@ class Board {
 
     getLines() {
         let lines = []
+        let side = parseInt(this.side)
 
         // horizontal
-        for (let i = 0; i < this.side; i++) {
+        for (let i = 0; i < side; i++) {
             let line = {}
-            for (let j = 0; j < this.side; j++) {
-                line[j + 3*i] = this.boxes[j+3*i]
+            for (let j = 0; j < side; j++) {
+                line[j + side*i] = this.boxes[j+side*i]
             }
             lines.push(line)
         }
 
         // vertical
-        for (let i = 0; i < this.side; i++) {
+        for (let i = 0; i < side; i++) {
             let line = {}
-            for (let j = 0; j < this.side; j++) {
-                line[j*this.side + i] = this.boxes[i+j * this.side]
+            for (let j = 0; j < side; j++) {
+                line[j*side + i] = this.boxes[i+j * side]
             }
             lines.push(line)
         }
 
         // diagonal
         let line = {}
-        for (let i = 0; i < this.side; i++) {
-            line[4*i] = this.boxes[4*i]
+        for (let i = 0; i < side; i++) {
+            console.log(side+1)
+            line[(side+1)*i] = this.boxes[(side+1)*i]
         }
         lines.push(line)
 
         line = {}
-        for (let i = 0; i < this.side; i++) {
-            line[2+2*i] = this.boxes[2+2*i]
+        for (let i = 0; i < side; i++) {
+            line[side-1+(side-1)*i] = this.boxes[side-1+(side-1)*i]
         }
         lines.push(line)
+        console.log(lines)
         return lines
     }
 
