@@ -11,7 +11,7 @@ class Board {
     constructor(side) {
         this.boxes = this.createBoxes(side)
         this.htmlBoxes = document.querySelectorAll('.game-table-division')
-        this.side = side
+        this.side = parseInt(side)
     }
 
     createBoxes(side) {
@@ -41,40 +41,38 @@ class Board {
 
     getLines() {
         let lines = []
-        let side = parseInt(this.side)
+       
 
         // horizontal
-        for (let i = 0; i < side; i++) {
+        for (let i = 0; i < this.side; i++) {
             let line = {}
-            for (let j = 0; j < side; j++) {
-                line[j + side*i] = this.boxes[j+side*i]
+            for (let j = 0; j < this.side; j++) {
+                line[j + this.side*i] = this.boxes[j+this.side*i]
             }
             lines.push(line)
         }
 
         // vertical
-        for (let i = 0; i < side; i++) {
+        for (let i = 0; i < this.side; i++) {
             let line = {}
-            for (let j = 0; j < side; j++) {
-                line[j*side + i] = this.boxes[i+j * side]
+            for (let j = 0; j < this.side; j++) {
+                line[j*this.side + i] = this.boxes[i+j * this.side]
             }
             lines.push(line)
         }
 
         // diagonal
         let line = {}
-        for (let i = 0; i < side; i++) {
-            console.log(side+1)
-            line[(side+1)*i] = this.boxes[(side+1)*i]
+        for (let i = 0; i < this.side; i++) {
+            line[(this.side+1)*i] = this.boxes[(this.side+1)*i]
         }
         lines.push(line)
 
         line = {}
-        for (let i = 0; i < side; i++) {
-            line[side-1+(side-1)*i] = this.boxes[side-1+(side-1)*i]
+        for (let i = 0; i < this.side; i++) {
+            line[this.side-1+(this.side-1)*i] = this.boxes[this.side-1+(this.side-1)*i]
         }
         lines.push(line)
-        console.log(lines)
         return lines
     }
 
