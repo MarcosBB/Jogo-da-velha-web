@@ -113,6 +113,9 @@ main {
 }
 
 @media (max-width: 700px) {
+    .game {
+        margin-top: 60px;
+    }
     .game-hud-scoreboard {
         width: 160px;
         padding: 10px;
@@ -149,6 +152,8 @@ main {
         margin-top: 14px;
         top: -30px; 
     }
+
+
     
 }
 
