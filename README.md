@@ -12,7 +12,7 @@ e design UI.
 
 Possui funcionalidades como:
 - 2 modos de jogo (Jogador vs Jogador e Jogador vs Computador).
-- Seletor de tamanho do tabuleiro, podendo-se jogar de 3x3 até 10x10.
+- Seletor de tamanho do tabuleiro, podendo-se jogar de 3x3 até 6x6.
 - 3 modos de dificuldade de jogo contra o computador (Fácil, Médio e Difícil).
 - Menu lateral de configurações.
 
