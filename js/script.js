@@ -13,7 +13,7 @@ let playButton = document.querySelector('.game-hud-play')
 let restartButton = document.querySelector('#restart-button')
 let botSwitch = document.querySelector(".bot-switch")
 let sideSelector = document.querySelector('.menu-options-option-slider')
-
+botSwitch.checked = true
 
 let side
 let player1
