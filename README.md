@@ -1,6 +1,10 @@
 # Jogo da velha web
 
 
+https://github.com/MarcosBB/Jogo-da-velha-web/assets/50207805/dd08f86c-bc78-4ee4-9e93-317444b20254
+
+
+
 ## Links
 - [**🚀 JOGAR**](https://marcosbb.github.io/Jogo-da-velha-web/)
 - [**🎨 Figma**](https://www.figma.com/design/xQWro5zL45I0bPdlImU2v2/Jogo-da-velha-web?node-id=0-1&t=LHrhNXFZ2pwficCl-1) 
