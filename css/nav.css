@@ -139,3 +139,26 @@ nav h1 {
     line-height: 24px;
     text-transform: uppercase;
 }
+
+#bot-difficulty{
+    background-color: var(--c10);
+    color: var(--c7);
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: medium;
+    padding: 5px;
+    width: 160px;
+    height: 36px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#bot-difficulty:hover {
+    background-color: var(--c9);
+    color: var(--c6);
+}
+
+#bot-difficulty:focus {
+    outline: none;
+}

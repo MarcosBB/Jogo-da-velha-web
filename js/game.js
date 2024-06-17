@@ -41,7 +41,6 @@ class Board {
 
     getLines() {
         let lines = []
-       
 
         // horizontal
         for (let i = 0; i < this.side; i++) {
@@ -91,7 +90,7 @@ export default class Game {
         this.player2 = player2
         this.board = new Board(side)
         this.winner = null
-        this.bot = new Bot("hard")
+        this.bot = new Bot(document.querySelector("#bot-difficulty").value)
 
         if (currentPlayer) {
             this.currentPlayer = currentPlayer
@@ -168,7 +167,6 @@ export default class Game {
     checkWinner(symbol) {
         let lines = this.board.getLines();
     
-        
         for (let i = 0; i < lines.length; i++) {
             if (Object.values(lines[i]).every((value) => value === symbol)) {
                 let buttonImg = document.querySelector('.game-hud-play img')
@@ -182,8 +180,6 @@ export default class Game {
         }
         return false;
     }
-
-    
 
     checkDraw() {
         if (this.board.boxes.every((box) => box !== "")) {
@@ -253,7 +249,6 @@ class Bot {
     }
 
     hardMove(board){
-
         function getVoidIndex(line){
             for (var nextMove in line) {
                 if (line[nextMove] === '') {
@@ -268,7 +263,6 @@ class Bot {
         let nextMove
 
         for(let line of board.getLines()){
-            
             let playerWinConditionCount = 0
             let botWinConditionCount = 0
             let keyList = Object.keys(line)
