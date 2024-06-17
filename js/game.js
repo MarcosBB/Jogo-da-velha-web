@@ -90,7 +90,7 @@ export default class Game {
         this.player2 = player2
         this.board = new Board(side)
         this.winner = null
-        this.bot = new Bot(document.querySelector(".bot-difficulty").value)
+        this.bot = new Bot(document.querySelector("#bot-difficulty").value)
 
         if (currentPlayer) {
             this.currentPlayer = currentPlayer
